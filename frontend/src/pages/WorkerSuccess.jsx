@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { CheckCircle, Home, Users } from 'lucide-react';
+import { CheckCircle, Home, Users, Settings } from 'lucide-react';
 import Layout from '../components/Layout';
 
 const WorkerSuccess = () => {
@@ -23,8 +23,16 @@ const WorkerSuccess = () => {
 
           <div className="space-y-4">
             <Link
-              to="/"
+              to="/worker-dashboard"
               className="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-6 rounded-lg transition-colors duration-200 flex items-center justify-center space-x-2"
+            >
+              <Settings className="w-4 h-4" />
+              <span>Manage Profile</span>
+            </Link>
+
+            <Link
+              to="/"
+              className="w-full bg-gray-100 hover:bg-gray-200 text-gray-700 font-semibold py-3 px-6 rounded-lg transition-colors duration-200 flex items-center justify-center space-x-2"
             >
               <Home className="w-4 h-4" />
               <span>Back to Home</span>
@@ -32,7 +40,7 @@ const WorkerSuccess = () => {
             
             <Link
               to="/client-search"
-              className="w-full bg-gray-100 hover:bg-gray-200 text-gray-700 font-semibold py-3 px-6 rounded-lg transition-colors duration-200 flex items-center justify-center space-x-2"
+              className="w-full bg-teal-100 hover:bg-teal-200 text-teal-700 font-semibold py-3 px-6 rounded-lg transition-colors duration-200 flex items-center justify-center space-x-2"
             >
               <Users className="w-4 h-4" />
               <span>Browse Other Workers</span>

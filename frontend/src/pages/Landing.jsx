@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Search, Phone, CheckCircle, Wrench, Zap } from 'lucide-react';
+import { Search, Users, Phone, CheckCircle, Wrench, Zap, Settings } from 'lucide-react';
 
 const Landing = () => {
   return (
@@ -8,11 +8,20 @@ const Landing = () => {
       {/* Header */}
       <header className="bg-white shadow-sm">
         <div className="max-w-6xl mx-auto px-4 py-6">
-          <div className="flex items-center space-x-3">
-            <div className="bg-blue-600 p-2 rounded-lg">
-              <Wrench className="w-6 h-6 text-white" />
+          <div className="flex items-center justify-between">
+            <div className="flex items-center space-x-3">
+              <div className="bg-blue-600 p-2 rounded-lg">
+                <Wrench className="w-6 h-6 text-white" />
+              </div>
+              <h1 className="text-2xl font-bold text-gray-800">WorkHub Local</h1>
             </div>
-            <h1 className="text-2xl font-bold text-gray-800">WorkHub Local</h1>
+            <Link
+              to="/worker-dashboard"
+              className="bg-gray-100 hover:bg-gray-200 text-gray-700 font-medium py-2 px-4 rounded-lg transition-colors duration-200 flex items-center space-x-2"
+            >
+              <Settings className="w-4 h-4" />
+              <span>Worker Dashboard</span>
+            </Link>
           </div>
         </div>
       </header>
@@ -96,10 +105,7 @@ const Landing = () => {
               { name: 'Mechanic', icon: '⚙️', color: 'gray' },
               { name: 'Gardener', icon: '🌱', color: 'green' },
             ].map((service, index) => (
-              <div
-                key={index}
-                className="bg-white p-4 rounded-xl shadow-md hover:shadow-lg transition-all duration-200 hover:scale-105"
-              >
+              <div key={index} className="bg-white p-4 rounded-xl shadow-md hover:shadow-lg transition-all duration-200 hover:scale-105">
                 <div className="text-3xl mb-2">
                   {typeof service.icon === 'string' ? service.icon : <service.icon className="w-8 h-8 mx-auto text-gray-600" />}
                 </div>

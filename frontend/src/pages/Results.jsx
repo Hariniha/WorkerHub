@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { Search, SortDesc } from 'lucide-react';
 import { mockWorkers } from '../data/mockData';
-import { getAllWorkers } from '../utils/storage';
 import WorkerCard from '../components/WorkerCard';
 import Layout from '../components/Layout';
 
