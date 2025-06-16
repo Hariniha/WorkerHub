@@ -17,10 +17,10 @@ export const storeWorker = async (worker) => {
   return await response.json();
 };
 
-export const updateWorkerByPhone = async (worker) => {
-  if (!worker.phone) throw new Error('Worker phone number is required for update');
+export const updateWorkerById = async (worker) => {
+  if (!worker.id) throw new Error('Worker id is  for update');
 
-  const response = await fetch(`http://localhost:5000/api/workers/phone/${worker.phone}`, {
+  const response = await fetch(`http://localhost:5000/api/workers/${worker._id}`, {
     method: 'PUT',
     headers: {
       'Content-Type': 'application/json',
@@ -35,15 +35,15 @@ export const updateWorkerByPhone = async (worker) => {
   return await response.json();
 };
 
-export const deleteWorkerByPhone = async (phone) => {
-  if (!phone) throw new Error('Worker phone number is required for deletion');
+export const deleteWorkerById = async (id) => {
+  if (!id) throw new Error('Worker id is required for deletion');
 
-  const response = await fetch(`http://localhost:5000/api/workers/phone/${phone}`, {
+  const response = await fetch(`http://localhost:5000/api/workers/${id}`, {
     method: 'DELETE',
   });
 
   if (!response.ok) {
-    throw new Error('Failed to delete profile by phone');
+    throw new Error('Failed to delete profile by id');
   }
 
   return await response.json(); // or nothing if your backend returns no body
