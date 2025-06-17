@@ -2,11 +2,11 @@ import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { ArrowLeft, Home } from 'lucide-react';
 
-const Layout = ({ 
-  children, 
-  showBackButton = false, 
+const Layout = ({
+  children,
+  showBackButton = false,
   showHomeButton = false,
-  title 
+  title
 }) => {
   const location = useLocation();
   const isHomePage = location.pathname === '/';
@@ -18,7 +18,7 @@ const Layout = ({
           <div className="max-w-4xl mx-auto px-4 py-4 flex items-center justify-between">
             <div className="flex items-center space-x-4">
               {showBackButton && (
-                <button 
+                <button
                   onClick={() => window.history.back()}
                   className="p-2 hover:bg-gray-100 rounded-lg transition-colors"
                 >
@@ -28,8 +28,8 @@ const Layout = ({
               {title && <h1 className="text-xl font-semibold text-gray-800">{title}</h1>}
             </div>
             {showHomeButton && (
-              <Link 
-                to="/" 
+              <Link
+                to="/"
                 className="p-2 hover:bg-gray-100 rounded-lg transition-colors"
               >
                 <Home className="w-5 h-5 text-gray-600" />

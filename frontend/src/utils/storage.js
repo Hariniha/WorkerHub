@@ -71,3 +71,33 @@ export const deleteWorkerById = async (id) => {
 
   return await response.json();
 };
+
+
+export const sendOtp = async (phone) => {
+  const response = await fetch('http://localhost:5000/api/workers/send-otp', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ phone }),
+  });
+
+  if (!response.ok) {
+    throw new Error('Failed to send OTP');
+  }
+
+  return await response.json();
+};
+
+export const verifyOtp = async (phone, otp) => {
+  const response = await fetch('http://localhost:5000/api/workers/verify-otp', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ phone, otp }),
+  });
+
+  if (!response.ok) {
+    throw new Error('Failed to verify OTP');
+  }
+
+  return await response.json();
+};
+

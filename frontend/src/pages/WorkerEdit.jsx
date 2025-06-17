@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { User, MapPin, Clock, Languages, Briefcase, Save } from 'lucide-react';
 import { skills } from '../data/mockData';
-import {  updateWorkerById } from '../utils/storage';
+import { updateWorkerById } from '../utils/storage';
 import Layout from '../components/Layout';
 
 const WorkerEdit = () => {
@@ -14,38 +14,38 @@ const WorkerEdit = () => {
     availability: '',
     languages: [],
   });
-  
+
   const [worker, setWorker] = useState(null);
   const [loading, setLoading] = useState(true);
   const { workerId } = useParams();
   const navigate = useNavigate();
-  
+
   const availableLanguages = ['Hindi', 'English', 'Kannada', 'Tamil', 'Telugu', 'Marathi', 'Gujarati', 'Bengali', 'Urdu'];
 
- useEffect(() => {
-  const fetchWorker = async () => {
-    try {
-      const response = await fetch(`http://localhost:5000/api/workers/${workerId}`);
-      const data = await response.json();
-      setWorker(data);
-      setFormData({
-        name: data.name,
-        experience: data.experience,
-        serviceArea: data.serviceArea,
-        pincode: data.pincode,
-        availability: data.availability,
-        languages: data.languages,
-      });
-    } catch (error) {
-      console.error('Error fetching worker:', error);
-      navigate('/worker-dashboard');
-    } finally {
-      setLoading(false);
-    }
-  };
+  useEffect(() => {
+    const fetchWorker = async () => {
+      try {
+        const response = await fetch(`http://localhost:5000/api/workers/${workerId}`);
+        const data = await response.json();
+        setWorker(data);
+        setFormData({
+          name: data.name,
+          experience: data.experience,
+          serviceArea: data.serviceArea,
+          pincode: data.pincode,
+          availability: data.availability,
+          languages: data.languages,
+        });
+      } catch (error) {
+        console.error('Error fetching worker:', error);
+        navigate('/worker-dashboard');
+      } finally {
+        setLoading(false);
+      }
+    };
 
-  if (workerId) fetchWorker();
-}, [workerId, navigate]);
+    if (workerId) fetchWorker();
+  }, [workerId, navigate]);
 
 
   const handleInputChange = (field, value) => {
@@ -60,31 +60,31 @@ const WorkerEdit = () => {
         : [...prev.languages, language]
     }));
   };
-const handleSubmit = (e) => {
-  e.preventDefault();
-  console.log("workersffffff:",worker);
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    console.log("workersffffff:", worker);
 
-  if (!worker) return;
+    if (!worker) return;
 
-  // Build object with only modified fields
-  const changedFields = {};
+    // Build object with only modified fields
+    const changedFields = {};
 
-  Object.keys(formData).forEach((key) => {
-    if (formData[key] !== worker[key]) {
-      changedFields[key] = formData[key];
+    Object.keys(formData).forEach((key) => {
+      if (formData[key] !== worker[key]) {
+        changedFields[key] = formData[key];
+      }
+    });
+
+    if (Object.keys(changedFields).length === 0) {
+      // No changes made
+      alert("No changes were made.");
+      return;
     }
-  });
+    console.log(worker._id, changedFields);
 
-  if (Object.keys(changedFields).length === 0) {
-    // No changes made
-    alert("No changes were made.");
-    return;
-  }
-  console.log(worker._id, changedFields);
-
-  updateWorkerById(worker._id, changedFields);
-  navigate('/worker-dashboard');
-};
+    updateWorkerById(worker._id, changedFields);
+    navigate('/worker-dashboard');
+  };
 
 
   if (loading) {
@@ -250,7 +250,7 @@ const handleSubmit = (e) => {
         <div className="mt-6 bg-gray-50 rounded-xl p-4">
           <div className="flex items-center space-x-2 text-sm text-gray-600">
             <span className="font-medium">Profile ID:</span>
-            <span className="font-mono">{worker.id}</span>
+            <span className="font-mono">{worker._id}</span>
           </div>
           <div className="flex items-center space-x-2 text-sm text-gray-600 mt-1">
             <span className="font-medium">Phone:</span>

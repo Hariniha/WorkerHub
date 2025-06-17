@@ -12,51 +12,51 @@ const ClientSearch = () => {
   const navigate = useNavigate();
 
   const handleGetLocation = async () => {
-  setIsGettingLocation(true);
+    setIsGettingLocation(true);
 
-  if (navigator.geolocation) {
-    navigator.geolocation.getCurrentPosition(
-      async (position) => {
-        const { latitude, longitude } = position.coords;
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(
+        async (position) => {
+          const { latitude, longitude } = position.coords;
 
-        try {
-          const response = await fetch(
-            `https://nominatim.openstreetmap.org/reverse?lat=${latitude}&lon=${longitude}&format=json`
-          );
-          const data = await response.json();
-          const address = data?.address;
+          try {
+            const response = await fetch(
+              `https://nominatim.openstreetmap.org/reverse?lat=${latitude}&lon=${longitude}&format=json`
+            );
+            const data = await response.json();
+            const address = data?.address;
 
-          const fullAddress = [
-            address?.house_number,
-            address?.road,
-            address?.suburb || address?.village,
-            address?.city || address?.town,
-            address?.state,
-            address?.postcode,
-            address?.country
-          ]
-            .filter(Boolean) // remove undefined/null
-            .join(', ');
+            const fullAddress = [
+              address?.house_number,
+              address?.road,
+              address?.suburb || address?.village,
+              address?.city || address?.town,
+              address?.state,
+              address?.postcode,
+              address?.country
+            ]
+              .filter(Boolean) // remove undefined/null
+              .join(', ');
 
-          setLocation(fullAddress || 'Your current location');
-        } catch (error) {
-          console.error('Error reverse geocoding:', error);
-          setLocation('Bangalore, Karnataka'); // fallback
-        } finally {
+            setLocation(fullAddress || 'Your current location');
+          } catch (error) {
+            console.error('Error reverse geocoding:', error);
+            setLocation('Bangalore, Karnataka'); // fallback
+          } finally {
+            setIsGettingLocation(false);
+          }
+        },
+        (error) => {
+          console.error('Error getting coordinates:', error);
+          setLocation('Bangalore, Karnataka');
           setIsGettingLocation(false);
         }
-      },
-      (error) => {
-        console.error('Error getting coordinates:', error);
-        setLocation('Bangalore, Karnataka');
-        setIsGettingLocation(false);
-      }
-    );
-  } else {
-    setLocation('Bangalore, Karnataka');
-    setIsGettingLocation(false);
-  }
-};
+      );
+    } else {
+      setLocation('Bangalore, Karnataka');
+      setIsGettingLocation(false);
+    }
+  };
 
 
   const handleSearch = (e) => {

@@ -1,43 +1,43 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { User, Edit3, Trash2, Phone, MapPin, Clock, Languages, Star, AlertTriangle } from 'lucide-react';
-import {  getAllWorkers,deleteWorkerById,getAllSkills   } from '../utils/storage';
+import { getAllWorkers, deleteWorkerById, getAllSkills } from '../utils/storage';
 import Layout from '../components/Layout';
 
 const WorkerDashboard = () => {
 
-    
+
   const [workers, setWorkers] = useState([]);
   const [skills, setSkills] = useState([]);
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(null);
   const navigate = useNavigate();
-   useEffect(() => {
-  const fetchWorkers = async () => {
-    try {
-      const workers = await getAllWorkers();
-      setWorkers(workers);
-    } catch (error) {
-      console.error('Error fetching workers:', error.message);
-    }
-  };
-  fetchWorkers();
-}, []);
-useEffect(() => {
-  const fetchData = async () => {
-    try {
-      const [workersData, skillsData] = await Promise.all([
-        getAllWorkers(),
-        getAllSkills(),
-      ]);
-      setWorkers(workersData);
-      setSkills(skillsData);
-    } catch (error) {
-      console.error('Error loading data:', error.message);
-    }
-  };
+  useEffect(() => {
+    const fetchWorkers = async () => {
+      try {
+        const workers = await getAllWorkers();
+        setWorkers(workers);
+      } catch (error) {
+        console.error('Error fetching workers:', error.message);
+      }
+    };
+    fetchWorkers();
+  }, []);
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const [workersData, skillsData] = await Promise.all([
+          getAllWorkers(),
+          getAllSkills(),
+        ]);
+        setWorkers(workersData);
+        setSkills(skillsData);
+      } catch (error) {
+        console.error('Error loading data:', error.message);
+      }
+    };
 
-  fetchData();
-}, []);
+    fetchData();
+  }, []);
 
 
   const handleEdit = (worker) => {
@@ -45,20 +45,20 @@ useEffect(() => {
   };
 
   const handleDelete = async (workerId) => {
-  try {
-    await deleteWorkerById(workerId); // Call your DELETE API
-    // Update local state only if deletion succeeds
-    setWorkers(prev => prev.filter(w => w._id !== workerId));
-    setShowDeleteConfirm(null);
-  } catch (error) {
-    console.error('Failed to delete worker:', error);
-    alert('Failed to delete worker profile. Please try again.');
-  }
-};
-const getSkillName = (skillId) => {
-  const skill = skills.find(s => s.id === skillId);
-  return skill ? skill.name : skillId;
-};
+    try {
+      await deleteWorkerById(workerId); // Call your DELETE API
+      // Update local state only if deletion succeeds
+      setWorkers(prev => prev.filter(w => w._id !== workerId));
+      setShowDeleteConfirm(null);
+    } catch (error) {
+      console.error('Failed to delete worker:', error);
+      alert('Failed to delete worker profile. Please try again.');
+    }
+  };
+  const getSkillName = (skillId) => {
+    const skill = skills.find(s => s.id === skillId);
+    return skill ? skill.name : skillId;
+  };
   if (workers.length === 0) {
     return (
       <Layout showBackButton showHomeButton title="Worker Dashboard">

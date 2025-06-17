@@ -36,7 +36,7 @@ const Landing = () => {
             Call, No Chat Needed
           </p>
           <p className="text-lg text-gray-500 max-w-2xl mx-auto">
-            Connect directly with trusted local professionals through phone calls. 
+            Connect directly with trusted local professionals through phone calls.
             Skip the messaging back and forth - get immediate responses and book services instantly.
           </p>
         </div>

@@ -23,7 +23,7 @@ const SelectRole = () => {
               <SkillCard
                 skill={skill.icon}
                 name={skill.name}
-                onClick={() => {}}
+                onClick={() => { }}
               />
             </Link>
           ))}

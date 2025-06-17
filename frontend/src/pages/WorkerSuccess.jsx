@@ -11,13 +11,13 @@ const WorkerSuccess = () => {
           <div className="bg-green-100 w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-6">
             <CheckCircle className="w-12 h-12 text-green-600" />
           </div>
-          
+
           <h2 className="text-2xl font-bold text-gray-800 mb-4">
             Profile Created Successfully!
           </h2>
-          
+
           <p className="text-gray-600 mb-8">
-            Your profile is now live and visible to nearby clients. 
+            Your profile is now live and visible to nearby clients.
             Start receiving calls for your services right away!
           </p>
 
@@ -37,7 +37,7 @@ const WorkerSuccess = () => {
               <Home className="w-4 h-4" />
               <span>Back to Home</span>
             </Link>
-            
+
             <Link
               to="/client-search"
               className="w-full bg-teal-100 hover:bg-teal-200 text-teal-700 font-semibold py-3 px-6 rounded-lg transition-colors duration-200 flex items-center justify-center space-x-2"

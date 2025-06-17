@@ -1,7 +1,9 @@
-    import React, { useState } from 'react';
+import React, { useState } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { Phone } from 'lucide-react';
 import Layout from '../components/Layout';
+import { sendOtp, verifyOtp } from '../utils/storage';
+
 
 const WorkerPhone = () => {
   const [phone, setPhone] = useState('');
@@ -11,20 +13,38 @@ const WorkerPhone = () => {
   const navigate = useNavigate();
   const skill = searchParams.get('skill');
 
-  const handleSendOTP = (e) => {
+  const handleSendOTP = async (e) => {
     e.preventDefault();
     if (phone.length >= 10) {
-      setOtpSent(true);
+      try {
+        const data = await sendOtp(phone); // ✅ await and capture response
+        console.log('OTP Sent:', data);
+        setOtpSent(true); // ✅ update UI state if OTP is sent successfully
+      } catch (err) {
+        console.error(err);
+        alert('Error sending OTP');
+      }
     }
   };
 
-  const handleVerifyOTP = (e) => {
+  const handleVerifyOTP = async (e) => {
     e.preventDefault();
-    // Simulate OTP verification (accept any 4 digits for demo)
-    if (otp.length === 4) {
-      navigate(`/worker-profile?skill=${skill}&phone=${phone}`);
+    try {
+      const data = await verifyOtp(phone, otp); // ✅ await and capture response
+      console.log('OTP Verify Response:', data);
+
+      if (data.verified) {
+        navigate(`/worker-profile?skill=${skill}&phone=${phone}`);
+      } else {
+        alert('Invalid OTP');
+      }
+    } catch (err) {
+      console.error(err);
+      alert('Error verifying OTP');
     }
   };
+
+
 
   return (
     <Layout showBackButton showHomeButton title="Phone Verification">
@@ -53,7 +73,7 @@ const WorkerPhone = () => {
                   id="phone"
                   value={phone}
                   onChange={(e) => setPhone(e.target.value)}
-                  placeholder="+91 98765 43210"
+                  placeholder="Enter Your Mobile Number"
                   className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                   required
                 />
@@ -75,10 +95,10 @@ const WorkerPhone = () => {
                   type="text"
                   id="otp"
                   value={otp}
-                  onChange={(e) => setOtp(e.target.value.replace(/\D/g, '').slice(0, 4))}
-                  placeholder="1234"
+                  onChange={(e) => setOtp(e.target.value.replace(/\D/g, '').slice(0, 6))}
+                  placeholder="Enter The OTP sent"
                   className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-center text-lg tracking-widest"
-                  maxLength={4}
+                  maxLength={6}
                   required
                 />
                 <p className="text-sm text-gray-500 mt-2">
@@ -98,15 +118,17 @@ const WorkerPhone = () => {
               >
                 Change Phone Number
               </button>
+              <div className="mt-6 bg-yellow-50 border border-yellow-200 rounded-lg p-4">
+                <p className="text-sm text-yellow-800">
+                  <strong>Note:</strong> Enter 6-digit code to continue.
+                </p>
+              </div>
             </form>
+
           )}
         </div>
 
-        <div className="mt-6 bg-yellow-50 border border-yellow-200 rounded-lg p-4">
-          <p className="text-sm text-yellow-800">
-            <strong>Demo Note:</strong> Enter any 4-digit code to continue with the demo.
-          </p>
-        </div>
+
       </div>
     </Layout>
   );

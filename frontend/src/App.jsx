@@ -14,7 +14,7 @@ function App() {
   return (
     <Router>
       <Routes>
-        <Route path="/" element={<Landing />} /> 
+        <Route path="/" element={<Landing />} />
         <Route path="/select-role" element={<SelectRole />} />
         <Route path="/worker-phone" element={<WorkerPhone />} />
         <Route path="/worker-profile" element={<WorkerProfile />} />

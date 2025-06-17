@@ -1,6 +1,8 @@
 const express = require('express');
 const router = express.Router();
 const Worker = require('../models/Worker');
+const twilio = require('twilio');
+
 
 
 
@@ -73,7 +75,7 @@ router.patch('/:id', async (req, res) => {
 // DELETE worker by Id
 router.delete('/:id', async (req, res) => {
   try {
-    
+
     const deleted = await Worker.findByIdAndDelete(req.params.id);
 
     if (!deleted) {
@@ -83,6 +85,42 @@ router.delete('/:id', async (req, res) => {
     res.json({ message: 'Worker deleted successfully' });
   } catch (err) {
     res.status(500).json({ error: 'Server error' });
+  }
+});
+
+const accountSid = process.env.TWILIO_SID;
+const authToken = process.env.TWILIO_AUTH_TOKEN;
+const verifySid = process.env.TWILIO_VERIFY_SID;
+const client = twilio(accountSid, authToken);
+
+router.post('/send-otp', async (req, res) => {
+  console.log('req.body:', req.body);
+
+  const { phone } = req.body;
+  try {
+    await client.verify.v2.services(verifySid)
+      .verifications
+      .create({ to: `+91${phone}`, channel: 'sms' });
+    res.json({ success: true });
+  } catch (err) {
+    console.error(err);
+    res.json({ success: false });
+  }
+});
+
+
+router.post('/verify-otp', async (req, res) => {
+  console.log('req.body:', req.body);
+
+  const { phone, otp } = req.body;
+  try {
+    const verificationCheck = await client.verify.v2.services(verifySid)
+      .verificationChecks
+      .create({ to: `+91${phone}`, code: otp });
+    res.json({ verified: verificationCheck.status === 'approved' });
+  } catch (err) {
+    console.error(err);
+    res.json({ verified: false });
   }
 });
 
