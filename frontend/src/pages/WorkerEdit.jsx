@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { User, MapPin, Clock, Languages, Briefcase, Save } from 'lucide-react';
 import { skills } from '../data/mockData';
-import { storeWorker, updateWorkerByPhone } from '../utils/storage';
+import { storeWorker, updateWorkerById } from '../utils/storage';
 import Layout from '../components/Layout';
 
 const WorkerEdit = () => {
@@ -22,27 +22,31 @@ const WorkerEdit = () => {
   
   const availableLanguages = ['Hindi', 'English', 'Kannada', 'Tamil', 'Telugu', 'Marathi', 'Gujarati', 'Bengali', 'Urdu'];
 
-  useEffect(() => {
-    if (workerId) {
-      const workers =  storeWorker();
-      const foundWorker = workers.find(w => w.id === workerId);
-      
-      if (foundWorker) {
-        setWorker(foundWorker);
-        setFormData({
-          name: foundWorker.name,
-          experience: foundWorker.experience,
-          serviceArea: foundWorker.serviceArea,
-          pincode: foundWorker.pincode,
-          availability: foundWorker.availability,
-          languages: foundWorker.languages,
-        });
-      } else {
-        navigate('/worker-dashboard');
-      }
+ useEffect(() => {
+  const fetchWorker = async () => {
+    try {
+      const response = await fetch(`http://localhost:5000/api/workers/${workerId}`);
+      const data = await response.json();
+      setWorker(data);
+      setFormData({
+        name: data.name,
+        experience: data.experience,
+        serviceArea: data.serviceArea,
+        pincode: data.pincode,
+        availability: data.availability,
+        languages: data.languages,
+      });
+    } catch (error) {
+      console.error('Error fetching worker:', error);
+      navigate('/worker-dashboard');
+    } finally {
+      setLoading(false);
     }
-    setLoading(false);
-  }, [workerId, navigate]);
+  };
+
+  if (workerId) fetchWorker();
+}, [workerId, navigate]);
+
 
   const handleInputChange = (field, value) => {
     setFormData(prev => ({ ...prev, [field]: value }));
@@ -56,25 +60,32 @@ const WorkerEdit = () => {
         : [...prev.languages, language]
     }));
   };
+const handleSubmit = (e) => {
+  e.preventDefault();
+  console.log("workersffffff:",worker);
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    
-    if (!worker) return;
-    
-    const updatedWorker = {
-      ...worker,
-      name: formData.name,
-      experience: formData.experience,
-      serviceArea: formData.serviceArea,
-      pincode: formData.pincode,
-      availability: formData.availability,
-      languages: formData.languages,
-    };
+  if (!worker) return;
 
-    updateWorker(updatedWorker);
-    navigate('/worker-dashboard');
-  };
+  // Build object with only modified fields
+  const changedFields = {};
+
+  Object.keys(formData).forEach((key) => {
+    if (formData[key] !== worker[key]) {
+      changedFields[key] = formData[key];
+    }
+  });
+
+  if (Object.keys(changedFields).length === 0) {
+    // No changes made
+    alert("No changes were made.");
+    return;
+  }
+  console.log(worker._id, changedFields);
+
+  updateWorkerById(worker._id, changedFields);
+  navigate('/worker-dashboard');
+};
+
 
   if (loading) {
     return (

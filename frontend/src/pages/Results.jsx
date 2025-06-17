@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { Search, SortDesc } from 'lucide-react';
-import { mockWorkers } from '../data/mockData';
+import { getAllWorkers } from '../utils/storage';
 import WorkerCard from '../components/WorkerCard';
 import Layout from '../components/Layout';
 
@@ -16,17 +16,16 @@ const Results = () => {
   const location = searchParams.get('location');
 
   useEffect(() => {
-    // Combine mock workers with stored workers
-    const allWorkers = [...mockWorkers, ...getAllWorkers()];
-
-    // Filter by skill
-    const filtered = skill
-      ? allWorkers.filter(worker => worker.skill === skill)
-      : allWorkers;
-
-    setWorkers(filtered);
-    setFilteredWorkers(filtered);
-  }, [skill]);
+   const fetchWorkers = async () => {
+     try {
+       const workers = await getAllWorkers();
+       setWorkers(workers);
+     } catch (error) {
+       console.error('Error fetching workers:', error.message);
+     }
+   };
+   fetchWorkers();
+ }, []);
 
   useEffect(() => {
     let result = [...workers];

@@ -32,31 +32,34 @@ router.get('/:id', async (req, res) => {
 });
 
 
-// PUT /api/workers/:id - Update a specific worker
-router.put('/phone/:phone', async (req, res) => {
+router.patch('/:id', async (req, res) => {
+  const { id } = req.params;
+  const updates = req.body;
+
   try {
-    const updatedWorker = await Worker.findOneAndUpdate(
-      { phone: req.params.phone },  // ✅ Correct filter
-      req.body,
-      { new: true, runValidators: true }
-    );
+    const updatedWorker = await Worker.findByIdAndUpdate(id, updates, {
+      new: true, // returns updated doc
+      runValidators: true,
+    });
 
     if (!updatedWorker) {
-      return res.status(404).json({ error: 'Worker not found' });
+      return res.status(404).json({ message: 'Worker not found' });
     }
 
     res.json(updatedWorker);
   } catch (err) {
-    res.status(400).json({ error: err.message });
+    console.error(err);
+    res.status(500).json({ message: 'Update failed' });
   }
 });
 
 
-// DELETE worker by phone
-router.delete('/phone/:phone', async (req, res) => {
+
+// DELETE worker by Id
+router.delete('/:id', async (req, res) => {
   try {
-    const { phone } = req.params;
-    const deleted = await Worker.findOneAndDelete({ phone });
+    
+    const deleted = await Worker.findByIdAndDelete(req.params.id);
 
     if (!deleted) {
       return res.status(404).json({ error: 'Worker not found' });

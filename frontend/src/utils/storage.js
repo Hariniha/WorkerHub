@@ -1,12 +1,11 @@
 // utils/storage.js
 
+// 
+
 export const storeWorker = async (worker) => {
   const response = await fetch('http://localhost:5000/api/workers', {
     method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-
+    headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(worker),
   });
 
@@ -17,19 +16,35 @@ export const storeWorker = async (worker) => {
   return await response.json();
 };
 
-export const updateWorkerById = async (worker) => {
-  if (!worker.id) throw new Error('Worker id is  for update');
+export const getAllWorkers = async () => {
+  const response = await fetch('http://localhost:5000/api/workers');
+  if (!response.ok) {
+    throw new Error('Failed to fetch workers');
+  }
+  return await response.json();
+};
+export const fetchWorkers = async () => {
+  const response = await fetch('http://localhost:5000/api/workers');
+  if (!response.ok) {
+    throw new Error('Failed to fetch workers');
+  }
+  return await response.json();
+};
 
-  const response = await fetch(`http://localhost:5000/api/workers/${worker._id}`, {
-    method: 'PUT',
+export const updateWorkerById = async (_id, updates) => {
+  console.log(_id);
+  if (!_id) throw new Error('Worker ID is required for update');
+
+  const response = await fetch(`http://localhost:5000/api/workers/${_id}`, {
+    method: 'PATCH', // PATCH is appropriate for partial updates
     headers: {
       'Content-Type': 'application/json',
     },
-    body: JSON.stringify(worker),
+    body: JSON.stringify(updates),
   });
 
   if (!response.ok) {
-    throw new Error('Failed to update profile by phone');
+    throw new Error('Failed to update profile');
   }
 
   return await response.json();
@@ -46,5 +61,5 @@ export const deleteWorkerById = async (id) => {
     throw new Error('Failed to delete profile by id');
   }
 
-  return await response.json(); // or nothing if your backend returns no body
+  return await response.json();
 };

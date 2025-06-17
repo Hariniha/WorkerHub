@@ -55,7 +55,7 @@ const WorkerProfile = () => {
     };
 
     storeWorker(worker);
-    navigate('/worker-success');
+    navigate('/worker-dashboard');
   };
 
   return (
