@@ -6,6 +6,7 @@ const twilio = require('twilio');
 
 
 
+
 const skills = [
   { id: 'plumber', name: 'Plumber', icon: 'Wrench' },
   { id: 'electrician', name: 'Electrician', icon: 'Zap' },
@@ -75,7 +76,7 @@ router.patch('/:id', async (req, res) => {
 // DELETE worker by Id
 router.delete('/:id', async (req, res) => {
   try {
-
+    
     const deleted = await Worker.findByIdAndDelete(req.params.id);
 
     if (!deleted) {
@@ -88,13 +89,13 @@ router.delete('/:id', async (req, res) => {
   }
 });
 
-const accountSid = 'AC7328967f87f18bdd6ffd71e0b03424d0';
-const authToken = '464303bcba2634a0494ce2851348e856';
-const verifySid = 'VA238d0d3c2b8ec3741533036ea7125e17';
+const accountSid = process.env.TWILIO_SID;
+const authToken = process.env.TWILIO_AUTH_TOKEN;
+const verifySid = process.env.TWILIO_VERIFY_SID;
 const client = twilio(accountSid, authToken);
 
 router.post('/send-otp', async (req, res) => {
-  console.log('req.body:', req.body);
+    console.log('req.body:', req.body); 
 
   const { phone } = req.body;
   try {
@@ -110,7 +111,7 @@ router.post('/send-otp', async (req, res) => {
 
 
 router.post('/verify-otp', async (req, res) => {
-  console.log('req.body:', req.body);
+      console.log('req.body:', req.body); 
 
   const { phone, otp } = req.body;
   try {
