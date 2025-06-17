@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { User, MapPin, Clock, Languages, Briefcase, Save } from 'lucide-react';
 import { skills } from '../data/mockData';
-import { storeWorker, updateWorkerById } from '../utils/storage';
+import {  updateWorkerById } from '../utils/storage';
 import Layout from '../components/Layout';
 
 const WorkerEdit = () => {

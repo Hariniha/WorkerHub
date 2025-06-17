@@ -31,6 +31,14 @@ export const fetchWorkers = async () => {
   return await response.json();
 };
 
+export const getAllSkills = async () => {
+  const response = await fetch('http://localhost:5000/api/workers');
+  if (!response.ok) {
+    throw new Error('Failed to fetch skills');
+  }
+  return response.json();
+};
+
 export const updateWorkerById = async (_id, updates) => {
   console.log(_id);
   if (!_id) throw new Error('Worker ID is required for update');

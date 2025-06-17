@@ -2,6 +2,16 @@ const express = require('express');
 const router = express.Router();
 const Worker = require('../models/Worker');
 
+
+
+const skills = [
+  { id: 'plumber', name: 'Plumber', icon: 'Wrench' },
+  { id: 'electrician', name: 'Electrician', icon: 'Zap' },
+  { id: 'painter', name: 'Painter', icon: 'Paintbrush' },
+  { id: 'carpenter', name: 'Carpenter', icon: 'Hammer' },
+  { id: 'mechanic', name: 'Mechanic', icon: 'Settings' },
+  { id: 'gardener', name: 'Gardener', icon: 'TreePine' },
+];
 // POST /api/workers - Create a new worker profile
 router.post('/', async (req, res) => {
   try {
@@ -16,6 +26,11 @@ router.post('/', async (req, res) => {
 router.get('/', async (req, res) => {
   const workers = await Worker.find();
   res.json(workers);
+});
+
+router.get('/skills', (req, res) => {
+  // Always return 200 with skills array, even if empty
+  res.status(200).json(skills);
 });
 
 // GET /api/workers/:id - Get a specific worker by ID

@@ -53,7 +53,7 @@ const WorkerProfile = () => {
       languages: formData.languages,
       rating: 5.0,
     };
-
+ 
     storeWorker(worker);
     navigate('/worker-dashboard');
   };

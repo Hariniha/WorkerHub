@@ -1,36 +1,53 @@
 import React, { useState, useEffect } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { Search, SortDesc } from 'lucide-react';
-import { getAllWorkers } from '../utils/storage';
+import { getAllWorkers, getAllSkills } from '../utils/storage';
 import WorkerCard from '../components/WorkerCard';
 import Layout from '../components/Layout';
 
 const Results = () => {
   const [searchParams] = useSearchParams();
   const [workers, setWorkers] = useState([]);
+  const [skills, setSkills] = useState([]);
   const [filteredWorkers, setFilteredWorkers] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
   const [sortBy, setSortBy] = useState('rating');
 
-  const skill = searchParams.get('skill');
+  const skillParam = searchParams.get('skill');
   const location = searchParams.get('location');
 
   useEffect(() => {
-   const fetchWorkers = async () => {
-     try {
-       const workers = await getAllWorkers();
-       setWorkers(workers);
-     } catch (error) {
-       console.error('Error fetching workers:', error.message);
-     }
-   };
-   fetchWorkers();
- }, []);
+    const fetchData = async () => {
+      try {
+        const [workersData, skillsData] = await Promise.all([
+          getAllWorkers(),
+          getAllSkills(),
+        ]);
+        setWorkers(workersData);
+        setSkills(skillsData);
+      } catch (error) {
+        console.error('Error fetching data:', error.message);
+      }
+    };
+    fetchData();
+  }, []);
 
   useEffect(() => {
     let result = [...workers];
 
-    // Apply search filter
+    // Filter by skill id if present
+    if (skillParam) {
+      result = result.filter(worker => worker.skill === skillParam);
+    }
+
+    // Filter by location
+    if (location) {
+      result = result.filter(worker =>
+        worker.serviceArea.toLowerCase().includes(location.toLowerCase())
+      );
+    }
+
+    // Filter by search term
     if (searchTerm) {
       result = result.filter(worker =>
         worker.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -38,7 +55,7 @@ const Results = () => {
       );
     }
 
-    // Apply sorting
+    // Sort workers
     switch (sortBy) {
       case 'rating':
         result.sort((a, b) => b.rating - a.rating);
@@ -54,12 +71,13 @@ const Results = () => {
     }
 
     setFilteredWorkers(result);
-  }, [workers, searchTerm, sortBy]);
+  }, [workers, searchTerm, sortBy, skillParam, location]);
 
-  const skillName = skill ? skill.charAt(0).toUpperCase() + skill.slice(1) : 'Workers';
+  // Get skill name by ID
+  const skillName = skills.find(s => s.id === skillParam)?.name || 'Workers';
 
   return (
-    <Layout showBackButton showHomeButton title={`${skillName}s near ${location}`}>
+    <Layout showBackButton showHomeButton title={`${skillName}s near ${location || 'your area'}`}>
       <div className="max-w-4xl mx-auto">
         {/* Search and Filter Bar */}
         <div className="bg-white rounded-xl shadow-lg p-6 mb-6">
@@ -95,7 +113,7 @@ const Results = () => {
             <h2 className="text-2xl font-bold text-gray-800">
               {filteredWorkers.length} {skillName}s found
             </h2>
-            <p className="text-gray-600">in {location}</p>
+            {location && <p className="text-gray-600">in {location}</p>}
           </div>
         </div>
 
@@ -103,7 +121,7 @@ const Results = () => {
         {filteredWorkers.length > 0 ? (
           <div className="grid gap-6 md:grid-cols-2">
             {filteredWorkers.map((worker) => (
-              <WorkerCard key={worker.id} worker={worker} />
+              <WorkerCard key={worker._id} worker={worker} />
             ))}
           </div>
         ) : (
