@@ -88,9 +88,9 @@ router.delete('/:id', async (req, res) => {
   }
 });
 
-const accountSid = process.env.TWILIO_SID;
-const authToken = process.env.TWILIO_AUTH_TOKEN;
-const verifySid = process.env.TWILIO_VERIFY_SID;
+const accountSid = 'AC7328967f87f18bdd6ffd71e0b03424d0';
+const authToken = '464303bcba2634a0494ce2851348e856';
+const verifySid = 'VA238d0d3c2b8ec3741533036ea7125e17';
 const client = twilio(accountSid, authToken);
 
 router.post('/send-otp', async (req, res) => {
