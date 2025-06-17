@@ -96,7 +96,7 @@ const WorkerPhone = () => {
                   id="otp"
                   value={otp}
                   onChange={(e) => setOtp(e.target.value.replace(/\D/g, '').slice(0, 6))}
-                  placeholder="Enter The OTP sent"
+                  placeholder="Enter 6-digit Number"
                   className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-center text-lg tracking-widest"
                   maxLength={6}
                   required
